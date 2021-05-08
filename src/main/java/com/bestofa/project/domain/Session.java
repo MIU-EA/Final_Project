@@ -17,26 +17,26 @@ import java.util.List;
 @Entity
 @Table(name = "sessions")
 public class Session {
-    @Id 
-    @GeneratedValue
-    private Integer id;
-    private LocalDate date;
-    private LocalTime startTime;
-    private Integer duration;
-    
-    @ManyToOne
-    private Person councelor;
-    
-    @ManyToOne
-    private Appointment  appointmentApproved;
-    
-    @OneToMany(mappedBy="RequestedSession",cascade=CascadeType.ALL)
-    @OrderColumn(name="sequence")
-    private List<AppointmentRequest> appointmentsRequest;
+	@Id
+	@GeneratedValue
+	private Integer id;
+	private LocalDate date;
+	private LocalTime startTime;
+	private Integer duration;
 
-    @ManyToOne
-    private Address address;
-    
+	@ManyToOne
+	private Person councelor;
+
+	@ManyToOne
+	private Appointment appointmentApproved;
+
+	@OneToMany(mappedBy = "requestedSession", cascade = CascadeType.ALL)
+	@OrderColumn(name = "sequence")
+	private List<AppointmentRequest> appointmentsRequest;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Address address;
+
 	public Session(LocalDate date, LocalTime startTime, Integer duration, Person councelor, Address address) {
 		super();
 		this.date = date;
@@ -44,5 +44,5 @@ public class Session {
 		this.duration = duration;
 		this.councelor = councelor;
 		this.address = address;
-	}    
+	}
 }
