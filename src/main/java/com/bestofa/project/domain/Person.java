@@ -9,6 +9,7 @@ import java.util.Map;
 
 @Entity
 @Table(name = "people")
+@SecondaryTable(name="users")
 @Getter
 public class Person {
     @Id @GeneratedValue
@@ -16,6 +17,9 @@ public class Person {
     private String name;
     private String surname;
     private String email;
+    @Column(table="users")
+    private String username;
+    @Column(table="users")
     private String password;
     @ElementCollection
     private Map<String, Role> roles;
@@ -27,12 +31,14 @@ public class Person {
     private List<AppointmentRequest> requestedAppointment;
     
     
-	public Person(String name, String surname, String email, String password) { //TODO: add roles
+	public Person(String name, String surname, String email,String username, String password,Map roles) { //TODO: add roles
 		super();
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
+		this.username=username;
 		this.password = password;
+		this.roles=roles;
 	}
     
     
