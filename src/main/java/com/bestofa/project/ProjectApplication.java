@@ -12,6 +12,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import com.bestofa.project.domain.Person;
 import com.bestofa.project.domain.Role;
 import com.bestofa.project.domain.Session;
+import com.bestofa.project.repository.PersonRepository;
+import com.bestofa.project.repository.RoleRepository;
 import com.bestofa.project.repository.SessionRepository;
 
 @SpringBootApplication
@@ -27,18 +29,28 @@ public class ProjectApplication {
 	
 	private static void runSeeder(ConfigurableApplicationContext context) {
 		SessionRepository sessionRepository = context.getBean(SessionRepository.class);
+		PersonRepository personRepository = context.getBean(PersonRepository.class);
+		RoleRepository roleRepository = context.getBean(RoleRepository.class);
+
+		Map<String,Role> map=new HashMap<String,Role>();
+
+		String[] roleNames = {"Admin", "Customer", "Provider"};
+		for (String roleName: roleNames) {
+			Role role = new Role(roleName);
+			roleRepository.save(role);
+			map.put(role.getName(), role);
+		}
+		
 
 		for (int i = 0; i < 10; i++) {
-			Map map=new HashMap<String,Role>();
-			Role role=new Role("Admin");
-			map.put("aalperenelbasan@gmail.com", role);
-			sessionRepository.save(
+            Person p=new Person("Alperen", "Elbasan", "aalperl.com","username", "123456",map);
+			personRepository.save(p);
+            sessionRepository.save(
 					new Session(
 							LocalDate.now(),
 							LocalTime.now(),
 							i + 5,
-							2,
-							new Person("Alperen", "Elbasan", "aalperenelbasan@gmail.com","username", "123456",map)
+							p
 					)
 			);
 		}
