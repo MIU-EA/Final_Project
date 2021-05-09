@@ -49,7 +49,7 @@ public class Person {
 	@MapKey(name = "name")
 	private Map<String, Role> roles;
 
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Session> sessions; // as a councelor
 
 	@OneToMany(mappedBy = "personApproved", cascade = CascadeType.ALL)
