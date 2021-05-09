@@ -4,9 +4,9 @@ spring:
   application:
     name: project
   datasource:
-    url: jdbc:mysql://localhost/EA_Final_project
+    url: jdbc:mysql://localhost:3306/ea
     username: root
-    password: 0911084978abyaleW
+    password: admin
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
