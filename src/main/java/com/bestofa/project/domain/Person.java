@@ -18,9 +18,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
-import org.hibernate.FetchMode;
-import org.hibernate.annotations.Fetch;
-import org.springframework.data.repository.cdi.Eager;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
