@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -41,19 +42,19 @@ public class Person {
 	@JoinColumn(name = "address_id")
 	private Address address;
 
-	@Column(table = "users")
+	@Column(table = "users", unique = true)
 	private String username;
 
 	@Column(table = "users")
 	private String password;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@MapKey(name = "name")
 	private Map<String, Role> roles;
 
-	@OneToMany(mappedBy="councelor", cascade = CascadeType.ALL)
-	@JsonIgnore
-	private List<Session> sessions; // as a councelor
+	@OneToMany(mappedBy = "counselor", cascade = CascadeType.ALL)
+  @JsonIgnore
+	private List<Session> sessions; // as a counselor
 
 	@OneToMany(mappedBy = "personApproved", cascade = CascadeType.ALL)
 	@JsonIgnore

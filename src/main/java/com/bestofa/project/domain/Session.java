@@ -27,7 +27,7 @@ public class Session {
 	private Integer duration;
 
 	@ManyToOne
-	private Person councelor;
+	private Person counselor;
 
 	@ManyToOne
 	private Appointment appointmentApproved;
@@ -44,7 +44,7 @@ public class Session {
 		this.date = date;
 		this.startTime = startTime;
 		this.duration = duration;
-		this.councelor = councelor;
+		this.counselor = councelor;
 		this.address = address;
 	}
 }
