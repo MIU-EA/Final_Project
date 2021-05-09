@@ -1,12 +1,12 @@
 server:
   port: 8081
-spring:    
+spring:
   application:
     name: project
   datasource:
-    url: jdbc:mysql://localhost:3306/ea?useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost/EA_Final_project
     username: root
-    password: admin
+    password: 0911084978abyaleW
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true

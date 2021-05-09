@@ -18,11 +18,13 @@ import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "people")
 @SecondaryTable(name = "users")
+@NoArgsConstructor
 @Getter
 @Setter
 public class Person {
