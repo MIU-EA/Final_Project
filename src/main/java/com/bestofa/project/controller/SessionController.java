@@ -1,24 +1,50 @@
 package com.bestofa.project.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.bestofa.project.domain.Session;
-import com.bestofa.project.repository.SessionRepository;
+import com.bestofa.project.service.SessionsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/sessions")
 public class SessionController {
-	
-	@Autowired
-	private SessionRepository sessionRepository;
-	
-	@GetMapping
-	public List<Session> listSessions() {
- 		return sessionRepository.findAll();
-	}
+
+    @Autowired
+    private SessionsService sessionsService;
+
+    @GetMapping
+    public List<Session> getAllSessions() {
+        return sessionsService.getAllSessions();
+    }
+
+    @GetMapping("/{sessionId}")
+    public Session getSessionById(@PathVariable("sessionId") Integer sessionId) {
+        return sessionsService.getSessionById(sessionId);
+    }
+
+    @PostMapping
+    public Integer saveSession(@RequestBody Session session) {
+        sessionsService.saveOrUpdate(session);
+        return session.getId();
+    }
+
+    @PutMapping
+    public Session updateSession(@RequestBody Session session) {
+        sessionsService.saveOrUpdate(session);
+        return session;
+    }
+
+    @DeleteMapping
+    public void deleteAllSession() {
+        sessionsService.deleteAll();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteSessionById(@PathVariable("id") Integer id) {
+        sessionsService.deleteSession(id);
+    }
+
+
 }
