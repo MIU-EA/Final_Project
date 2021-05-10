@@ -66,7 +66,7 @@ public class ProjectApplication {
 			personRepository.save(person);
 			sessionRepository.save(new Session(LocalDate.now(), LocalTime.now(), i + 5, person, address));
 		}
-		sendEmailService.sendEmail();
+		//sendEmailService.sendEmail();
 	}
 
 }
