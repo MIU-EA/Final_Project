@@ -1,10 +1,10 @@
 server:
   port: 8081
-spring:    
+spring:
   application:
     name: project
   datasource:
-    url: jdbc:mysql://localhost:3306/ea?useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/ea
     username: root
     password: Mullerbar@123
     driverClassName: com.mysql.cj.jdbc.Driver
@@ -17,4 +17,16 @@ spring:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQL8Dialect 
+  mail:
+    protocol: smtp
+    host: smtp.gmail.com
+    port: 587
+    username:  essebani.anas@gmail.com 
+    password: kpozlnxqmfqgkpkc
+
+    properties:      mail:
+        smtp:
+          auth:  true
+          starttls:
+            enable:  true

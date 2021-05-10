@@ -10,5 +10,5 @@ import com.bestofa.project.domain.Person;
 @Repository
 @Transactional
 public interface PersonRepository extends JpaRepository<Person, Integer> {
-	
+	Person findByUsername(String username);
 }

@@ -3,6 +3,7 @@ package com.bestofa.project.domain;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.*;
 
@@ -13,17 +14,18 @@ import lombok.*;
 @ToString
 
 @Entity
+@Table(name = "addresses")
 public class Address {
 	@Id
 	@GeneratedValue
-    private Integer id;
-    private String zipcode;
-    private String street;
-    private String city;
-    private String state;
-    private String country;
-	
-    public Address(String zipcode, String street, String city, String state, String country) {
+	private Integer id;
+	private String zipcode;
+	private String street;
+	private String city;
+	private String state;
+	private String country;
+
+	public Address(String zipcode, String street, String city, String state, String country) {
 		super();
 		this.zipcode = zipcode;
 		this.street = street;
@@ -31,5 +33,4 @@ public class Address {
 		this.state = state;
 		this.country = country;
 	}
-    
 }
