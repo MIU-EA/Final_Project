@@ -4,30 +4,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
-import javax.persistence.OneToMany;
-import javax.persistence.SecondaryTable;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "people")
 @SecondaryTable(name = "users")
+@NoArgsConstructor
 @Getter
 @Setter
+
 public class Person {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
 	private String surname;
@@ -48,13 +41,16 @@ public class Person {
 	private Map<String, Role> roles;
 
 	@OneToMany
+	@JsonIgnore
 	private List<Session> sessions; // as a councelor
 
-	@OneToMany(mappedBy = "personApproved", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "personApproved", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private List<Appointment> approvedAppointments;
 
 	@OneToMany(mappedBy = "personRequested", cascade = CascadeType.ALL)
-	private List<AppointmentRequest> requestedAppointment;
+	@JsonIgnore
+	private List<AppointmentRequest> requestedAppointments;
 
 	public Person(String name, String surname, String email, String username, String password, Map<String, Role> roles) {
 		super();

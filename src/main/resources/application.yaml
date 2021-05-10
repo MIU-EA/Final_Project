@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/ea?useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root
-    password: admin
+    password: Mullerbar@123
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true

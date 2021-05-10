@@ -1,14 +1,13 @@
 package com.bestofa.project.repository;
 
-import javax.transaction.Transactional;
-
+import com.bestofa.project.domain.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.bestofa.project.domain.Person;
+import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public interface PersonRepository extends JpaRepository<Person, Integer> {
-	
+public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
+
 }
