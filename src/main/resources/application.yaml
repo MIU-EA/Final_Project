@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/ea
     username: root
-    password: Mullerbar@123
+    password: admin
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true

@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.bestofa.project.filters.JwtRequestFilter;
 import com.bestofa.project.security.JwtAuthenticationEntryPoint;
+import com.bestofa.project.service.JwtUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -27,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 	@Autowired
-	private UserDetailsService jwtUserDetailsService;
+	private JwtUserDetailsService jwtUserDetailsService;
 
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;

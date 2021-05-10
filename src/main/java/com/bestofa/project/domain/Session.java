@@ -34,7 +34,7 @@ public class Session {
 
 	@OneToMany(mappedBy = "requestedSession", cascade = CascadeType.ALL)
 	@OrderColumn(name = "sequence")
-	private List<AppointmentRequest> appointmentsRequest;
+	private List<Appointment> appointmentsRequest;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Address address;
