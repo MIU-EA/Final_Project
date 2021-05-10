@@ -1,10 +1,6 @@
 package com.bestofa.project.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +11,10 @@ import lombok.Setter;
 @Setter
 
 @Entity
-@Table(name = "appointment_requests")
 public class AppointmentRequest {
  
 	@Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
     private Person personRequested;
