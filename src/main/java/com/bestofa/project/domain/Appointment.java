@@ -12,6 +12,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Entity
+@Table(name = "appointments")
 public class Appointment {
  
 	@Id
@@ -19,14 +20,13 @@ public class Appointment {
     private Integer id;
 
     @ManyToOne
-    private Person personApproved;
-
+    private Person requestor;
     @ManyToOne
     private Session session;
     
     
     public Appointment(Person approved, Session session) {
- 		this.personApproved = approved;
+ 		this.requestor = approved;
  		this.session = session;
  	}
 }
