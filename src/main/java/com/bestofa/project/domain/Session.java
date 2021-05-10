@@ -2,6 +2,8 @@ package com.bestofa.project.domain;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,7 +27,7 @@ public class Session {
 	private Integer duration;
 
 	@ManyToOne
-	private Person councelor;
+	private Person counselor;
 
 	@ManyToOne
 	private Appointment appointmentApproved;
@@ -42,7 +44,7 @@ public class Session {
 		this.date = date;
 		this.startTime = startTime;
 		this.duration = duration;
-		this.councelor = councelor;
+		this.counselor = councelor;
 		this.address = address;
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -17,12 +18,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "people")
 @SecondaryTable(name = "users")
+@NoArgsConstructor
 @Getter
 @Setter
 public class Person {
@@ -37,23 +42,26 @@ public class Person {
 	@JoinColumn(name = "address_id")
 	private Address address;
 
-	@Column(table = "users")
+	@Column(table = "users", unique = true)
 	private String username;
 
 	@Column(table = "users")
 	private String password;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@MapKey(name = "name")
 	private Map<String, Role> roles;
 
-	@OneToMany
-	private List<Session> sessions; // as a councelor
+	@OneToMany(mappedBy = "counselor", cascade = CascadeType.ALL)
+  @JsonIgnore
+	private List<Session> sessions; // as a counselor
 
 	@OneToMany(mappedBy = "personApproved", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Appointment> approvedAppointments;
 
 	@OneToMany(mappedBy = "personRequested", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<AppointmentRequest> requestedAppointment;
 
 	public Person(String name, String surname, String email, String username, String password, Map<String, Role> roles) {
