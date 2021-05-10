@@ -5,9 +5,14 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bestofa.project.domain.Address;
 import com.bestofa.project.domain.Person;
@@ -21,18 +26,21 @@ import com.bestofa.project.repository.SessionRepository;
 @SpringBootApplication
 public class ProjectApplication {
 
+	@Autowired
+	private ApplicationContext context;
+
+	@Autowired
+	private PasswordEncoder encoder;
+	
 	public static void main(String[] args) {
-
-		ConfigurableApplicationContext context = SpringApplication.run(ProjectApplication.class, args);
-
-		runSeeder(context);
+		SpringApplication.run(ProjectApplication.class, args);
 	}
 
-	private static void runSeeder(ConfigurableApplicationContext context) {
+	@EventListener
+	private void runSeeder(ContextRefreshedEvent event) {
 		SessionRepository sessionRepository = context.getBean(SessionRepository.class);
 		PersonRepository personRepository = context.getBean(PersonRepository.class);
 		RoleRepository roleRepository = context.getBean(RoleRepository.class);
-		AddressRepository addressRepository = context.getBean(AddressRepository.class);
 
 		Map<String, Role> map = new HashMap<String, Role>();
 
@@ -43,12 +51,35 @@ public class ProjectApplication {
 			map.put(role.getName(), role);
 		}
 
+		String[] names = {
+			"Alperen",
+			"Abyalew",
+			"Anuj",
+			"Abraham",
+			"Anas"
+		};
+		String[] surnames = {
+			"Elbasan",
+			"Ambaneh",
+			"Aryal",
+			"Abrea",
+			"Essebani",
+		};
+		String[] emails = {
+			"aelbasan@miu.edu",
+			"aambaneh@miu.edu",
+			"anujaryal@miu.edu",
+			"aabrea@miu.edu",
+			"aessenabani@miu.edu"
+		};
 
 		for (int i = 0; i < 10; i++) {
-			Person person = new Person("Alperen", "Elbasan", "aalperl.com", "username", "123456", map);
+			Person person = new Person(names[i % names.length], surnames[i % surnames.length], emails[i % emails.length], "username" + i, encoder.encode("123456"), map);
 			Address address = new Address("52557", "1000 N 4th Street", "Fairfield", "IA", "USA");
 			personRepository.save(person);
-			sessionRepository.save(new Session(LocalDate.now(), LocalTime.now(), i + 5, person, address));
+			LocalDate date = LocalDate.now().plusDays(i);
+			
+			sessionRepository.save(new Session(date, date.atTime(i % 24, i * 34 % 60).toLocalTime(), i + 5, person, address));
 		}
 
 		//sendEmailService.sendEmail();

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -60,5 +61,10 @@ public class Person {
 		this.username = username;
 		this.password = password;
 		this.roles = new HashMap<>(roles);
+	}
+	
+	@JsonGetter
+	public String getFullname() {
+		return name + " " + surname;
 	}
 }
