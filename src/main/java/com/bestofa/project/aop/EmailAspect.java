@@ -16,7 +16,7 @@ public class EmailAspect {
 	@AfterReturning("")
 	public void sendConfiramtionEmail(AppointmentRequest appointmentRequest ) {
 		String toRequested=appointmentRequest.getPersonRequested().getEmail();
-		String toProvider=appointmentRequest.getRequestedSession().getCouncelor().getEmail();
+		String toProvider=appointmentRequest.getRequestedSession().getCounselor().getEmail();
 	}
 	
 
