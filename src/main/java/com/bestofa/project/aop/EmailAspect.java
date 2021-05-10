@@ -9,7 +9,7 @@ import com.bestofa.project.jms.EmailService;
 public class EmailAspect {
 	@Autowired
 	EmailService emailService;
-//	
+//
 //	@AfterReturning("")
 //	public void sendConfiramtionEmail(AppointmentRequest appointmentRequest ) {
 //		String toRequested=appointmentRequest.getPersonRequested().getEmail();

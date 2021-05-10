@@ -4,22 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
-import javax.persistence.OneToMany;
-import javax.persistence.SecondaryTable;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,9 +17,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+
 public class Person {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
 	private String surname;
@@ -42,18 +30,18 @@ public class Person {
 	@JoinColumn(name = "address_id")
 	private Address address;
 
-	@Column(table = "users", unique = true)
+	@Column(table = "users")
 	private String username;
 
 	@Column(table = "users")
 	private String password;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany
 	@MapKey(name = "name")
 	private Map<String, Role> roles;
 
 	@OneToMany(mappedBy = "counselor", cascade = CascadeType.ALL)
-  @JsonIgnore
+    @JsonIgnore
 	private List<Session> sessions; // as a counselor
 
 

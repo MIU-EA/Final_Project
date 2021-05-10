@@ -23,10 +23,10 @@ public class AppointmentController {
 
     @Autowired
     private AppointmentService appointmentService;
-    
+
     @Autowired
     private PersonRepository personRepository;
-    
+
     @Autowired
     private SessionRepository sessionRepository;
 
@@ -47,12 +47,12 @@ public class AppointmentController {
     	Appointment appointment= new Appointment();
     	appointment.setRequestor(personRepository.findByUsername("username22"));
     	appointment.setSession(sessionRepository.findById(appointmenId).get());
-    	
+
     	appointment =appointmentService.saveOrUpdateappointment(appointment);
     	return appointment;
     }
 
- 
+
 
     @DeleteMapping("/{id}")
     public void CancelAppointment(@PathVariable Integer id) {
