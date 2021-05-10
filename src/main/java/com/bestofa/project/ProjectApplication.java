@@ -18,9 +18,12 @@ import com.bestofa.project.domain.Address;
 import com.bestofa.project.domain.Person;
 import com.bestofa.project.domain.Role;
 import com.bestofa.project.domain.Session;
+import com.bestofa.project.jms.EmailService;
+import com.bestofa.project.repository.AddressRepository;
 import com.bestofa.project.repository.PersonRepository;
 import com.bestofa.project.repository.RoleRepository;
 import com.bestofa.project.repository.SessionRepository;
+
 
 @SpringBootApplication
 public class ProjectApplication {
@@ -44,6 +47,9 @@ public class ProjectApplication {
 		SessionRepository sessionRepository = context.getBean(SessionRepository.class);
 		PersonRepository personRepository = context.getBean(PersonRepository.class);
 		RoleRepository roleRepository = context.getBean(RoleRepository.class);
+		AddressRepository addressRepository = context.getBean(AddressRepository.class);
+	  EmailService sendEmailService = context.getBean(EmailService.class);
+
 
 		Map<String, Role> map = new HashMap<String, Role>();
 
@@ -60,6 +66,7 @@ public class ProjectApplication {
 			personRepository.save(person);
 			sessionRepository.save(new Session(LocalDate.now(), LocalTime.now(), i + 5, person, address));
 		}
+		sendEmailService.sendEmail();
 	}
 
 }
