@@ -61,7 +61,7 @@ public class ProjectApplication {
 		}
 
 		for (int i = 1; i <= 10; i++) {
-			Person person = new Person("Alperen", "Elbasan", "aalperl.com", "username" + i, encoder.encode("123456"), map);
+			Person person = new Person("Alperen", "Elbasan", "aalperl.com", "username"+i + i, encoder.encode("123456"), map);
 			Address address = new Address("52557", "1000 N 4th Street", "Fairfield", "IA", "USA");
 			personRepository.save(person);
 			sessionRepository.save(new Session(LocalDate.now(), LocalTime.now(), i + 5, person, address));

@@ -56,13 +56,10 @@ public class Person {
   @JsonIgnore
 	private List<Session> sessions; // as a counselor
 
-	@OneToMany(mappedBy = "personApproved", cascade = CascadeType.ALL)
-	@JsonIgnore
-	private List<Appointment> approvedAppointments;
 
-	@OneToMany(mappedBy = "personRequested", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "requestor", cascade = CascadeType.ALL)
 	@JsonIgnore
-	private List<AppointmentRequest> requestedAppointment;
+	private List<Appointment> Appointments;
 
 	public Person(String name, String surname, String email, String username, String password, Map<String, Role> roles) {
 		super();
