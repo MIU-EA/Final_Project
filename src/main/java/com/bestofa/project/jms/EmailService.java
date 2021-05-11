@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.bestofa.project.domain.Appointment;
@@ -16,7 +17,7 @@ public class EmailService {
 	
 	@Autowired
     private JavaMailSender javaMailSender;
-    
+    @Async
     public void sendEmail(List<String>to,Appointment appointment) {
         SimpleMailMessage msg = new SimpleMailMessage();
         String[]addresses =to.stream().toArray(String[]::new);

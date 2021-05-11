@@ -1,8 +1,11 @@
 package com.bestofa.project.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bestofa.project.domain.Appointment;
+import com.bestofa.project.domain.Person;
+import com.bestofa.project.domain.Session;
 import com.bestofa.project.repository.PersonRepository;
 import com.bestofa.project.repository.SessionRepository;
 import com.bestofa.project.service.AppointmentService;
+import com.bestofa.project.service.SessionsService;
 
 @RestController
 @RequestMapping("/clients/appointments")
@@ -29,10 +35,11 @@ public class AppointmentController {
 	private PersonRepository personRepository;
 
 	@Autowired
-	private SessionRepository sessionRepository;
+	private SessionsService sessionsService;
 
 	@GetMapping
-	public List<Appointment> getAllAppointments(Authentication authentication) {
+	public List<Appointment> getAllappointments(Authentication authentication) {
+
 //    	String personUsername=authentication.getName();
 //        return personRepository.findByUsername(personUsername).getAppointments();
 		return appointmentService.getAllAppointmentByUserId(2);
@@ -44,38 +51,51 @@ public class AppointmentController {
 	}
 
 	@PostMapping
-	public Appointment createAppointmentRequest(Authentication authentication,
-			@RequestParam(value = "appointmenId", required = true) Integer appointmenId) {
-		Appointment appointment = new Appointment(
-				// TODO: get person from privilege
-				personRepository.findByUsername("username22"),
-				// why APPOINTMENT ID?
-				sessionRepository.findById(appointmenId).get());
-		return appointmentService.saveOrUpdateappointment(appointment);
+	public ResponseEntity<Appointment> createAppointmentRequest(Authentication authentication,
+			@RequestParam(value = "sessionId", required = true) Integer sessionId) {
+		// String personUsername=authentication.getName();
+		Person person=personRepository.findByUsername("username22");
+		Session session = sessionsService.getSessionById(sessionId);
+		Appointment appointemt =appointmentService.bookAppointmet(session, person);
+		if (appointemt!=null) {
+			return new ResponseEntity<Appointment>(appointemt, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<Appointment>(HttpStatus.NOT_FOUND);
+
 	}
 
+	
 	@DeleteMapping("/{id}")
-	public void deleteAppointment(@PathVariable Integer id) {
+	public void deletAppointment(@PathVariable Integer id) {
 		appointmentService.deleteappointment(id);
 	}
 
 	@PutMapping("/{id}/cancel")
-	public Appointment cancelAppointment(@PathVariable Integer id) {
+	public ResponseEntity<Appointment> cancelAppointment(Authentication authentication, @PathVariable Integer id) {
 		Appointment appointment = appointmentService.getappointmentById(id);
-		appointment.getSession().setAppointmentApproved(null);
-		appointment.setStatus("Canceld");
-		appointment = appointmentService.saveOrUpdateappointment(appointment);
-		return appointment;
+		// String personUsername=authentication.getName();
+		HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
 
+		Person person = personRepository.findByUsername("username22");
+		boolean canceled = appointmentService.cancelAppointmet(appointment, person);
+
+		if (canceled) {
+			status = HttpStatus.OK;
+		}
+
+		return new ResponseEntity<Appointment>(appointment, status);
 	}
 
 	@PutMapping("/{id}/approve")
-	public Appointment approveAppointment(@PathVariable Integer id) {
+	public ResponseEntity<Appointment> approveAppointment(Authentication authentication, @PathVariable Integer id) {
+		// String personUsername=authentication.getName();
+		HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
 		Appointment appointment = appointmentService.getappointmentById(id);
-		appointment.getSession().setAppointmentApproved(appointment);
-		appointment.setStatus("Approved");
-		appointment = appointmentService.saveOrUpdateappointment(appointment);
-		return appointment;
+		Person person = personRepository.findByUsername("username22");
+		if (appointmentService.approveAppointmet(appointment, person))
+			status = HttpStatus.OK;
+		return new ResponseEntity<Appointment>(appointment, status);
 
 	}
 
