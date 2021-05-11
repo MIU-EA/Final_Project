@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bestofa.project.domain.Appointment;
 import com.bestofa.project.domain.Session;
 import com.bestofa.project.service.SessionsService;
 
 @RestController
-@RequestMapping("/sessions")
+@RequestMapping("providers/sessions")
 @CrossOrigin
 public class SessionController {
 
@@ -54,6 +55,11 @@ public class SessionController {
     @DeleteMapping("/{id}")
     public void deleteSessionById(@PathVariable("id") Integer id) {
         sessionsService.deleteSession(id);
+    }
+    
+    @GetMapping("/{id}/appointments")
+    public List<Appointment> getAllAppointmentOfSession(@PathVariable("id") Integer id) {
+        return sessionsService.getAllAppointmets(id);
     }
 
 

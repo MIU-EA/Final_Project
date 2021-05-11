@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bestofa.project.domain.Appointment;
+import com.bestofa.project.domain.Session;
 import com.bestofa.project.repository.PersonRepository;
 import com.bestofa.project.repository.SessionRepository;
 import com.bestofa.project.service.AppointmentService;
@@ -32,8 +34,9 @@ public class AppointmentController {
 
     @GetMapping
     public List<Appointment> getAllappointments(Authentication authentication) {
-    	String personUsername=authentication.getName();
-        return personRepository.findByUsername(personUsername).getAppointments();
+//    	String personUsername=authentication.getName();
+//        return personRepository.findByUsername(personUsername).getAppointments();
+    	 return appointmentService.getAllAppointmentByUserId(2);
     }
 
     @GetMapping("/{appointmentId}")
@@ -46,8 +49,9 @@ public class AppointmentController {
     	//String personUsername=authentication.getName();
     	Appointment appointment= new Appointment();
     	appointment.setRequestor(personRepository.findByUsername("username22"));
-    	appointment.setSession(sessionRepository.findById(appointmenId).get());
-
+    	Session session=sessionRepository.findById(appointmenId).get();
+    	appointment.setSession(session);
+    	session.getAppointmentsRequest().add(appointment);
     	appointment =appointmentService.saveOrUpdateappointment(appointment);
     	return appointment;
     }
@@ -55,9 +59,29 @@ public class AppointmentController {
 
 
     @DeleteMapping("/{id}")
-    public void CancelAppointment(@PathVariable Integer id) {
+    public void deletAppointment(@PathVariable Integer id) {
         appointmentService.deleteappointment(id);
     }
-
+    
+    @PutMapping("/{id}/cancel")
+    public Appointment cancelAppointment(@PathVariable Integer id) {
+    	Appointment appointment=appointmentService.getappointmentById(id);
+    	appointment.getSession().setAppointmentApproved(null);
+    	appointment.setStatus("Canceld");
+    	appointment =appointmentService.saveOrUpdateappointment(appointment);
+    	return appointment;   
+    	
+    }
+    
+    @PutMapping("/{id}/approve")
+    public Appointment approveAppointment(@PathVariable Integer id) {
+    	Appointment appointment=appointmentService.getappointmentById(id);
+    	appointment.getSession().setAppointmentApproved(appointment);
+    	appointment.setStatus("Approved");
+    	appointment =appointmentService.saveOrUpdateappointment(appointment);
+    	return appointment;   
+    	
+    }
+    
 
 }

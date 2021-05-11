@@ -1,5 +1,6 @@
 package com.bestofa.project.service;
 
+import com.bestofa.project.domain.Appointment;
 import com.bestofa.project.domain.Session;
 import com.bestofa.project.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import java.util.List;
 public class SessionsService {
     @Autowired
     SessionRepository sessionRepository;
+    
 
     public List<Session> getAllSessions(){
         return sessionRepository.findAll();
@@ -30,5 +32,12 @@ public class SessionsService {
 
     public void deleteSession(Integer id){
         sessionRepository.deleteById(id);
+    }
+    
+    public List<Appointment> getAllAppointmets(Integer id){
+    	List<Appointment> appointmentList=sessionRepository.findById(id).get().getAppointmentsRequest();
+        if(sessionRepository.findById(id).get().getAppointmentApproved() != null)
+        	appointmentList.add(sessionRepository.findById(id).get().getAppointmentApproved());
+    return appointmentList;
     }
 }

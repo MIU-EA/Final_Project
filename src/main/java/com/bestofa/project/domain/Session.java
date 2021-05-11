@@ -3,6 +3,7 @@ package com.bestofa.project.domain;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class Session {
 	private Person counselor;
 
 	@ManyToOne
+	@JsonIgnore
 	private Appointment appointmentApproved;
 
 	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
