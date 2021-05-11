@@ -36,6 +36,18 @@ public class AppointmentService {
     	return appointmentRepository.save(appointment);
    
     }
+    
+    public void approveAppointment() {
+    	
+    }
+    
+    public void cancelAppointment() {
+    	
+    }
+    
+    public void createAppointmentRequest() {
+    	
+    }
 
 
     public void deleteappointment(Integer id){
