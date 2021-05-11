@@ -36,21 +36,18 @@ public class Person {
 	@Column(table = "users")
 	private String password;
 
-	@ManyToMany
-	@MapKey(name = "name")
+	@ManyToMany(fetch=FetchType.EAGER)
+	@MapKey(name = "name" )
 	private Map<String, Role> roles;
 
-	@OneToMany
-	@JsonIgnore
-	private List<Session> sessions; // as a councelor
+	@OneToMany(mappedBy = "counselor", cascade = CascadeType.ALL)
+    @JsonIgnore
+	private List<Session> sessions; // as a counselor
 
-	@OneToMany(mappedBy = "personApproved", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonIgnore
-	private List<Appointment> approvedAppointments;
 
-	@OneToMany(mappedBy = "personRequested", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "requestor", cascade = CascadeType.ALL)
 	@JsonIgnore
-	private List<AppointmentRequest> requestedAppointments;
+	private List<Appointment> Appointments;
 
 	public Person(String name, String surname, String email, String username, String password, Map<String, Role> roles) {
 		super();

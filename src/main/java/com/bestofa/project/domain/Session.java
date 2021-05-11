@@ -32,8 +32,9 @@ public class Session {
 	@ManyToOne
 	private Appointment appointmentApproved;
 
-	@OneToMany(mappedBy = "requestedSession", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
 	@OrderColumn(name = "sequence")
+	@JsonIgnore
 	private List<Appointment> appointmentsRequest;
 
 	@ManyToOne(cascade = CascadeType.ALL)
