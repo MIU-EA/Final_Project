@@ -36,16 +36,13 @@ public class AppointmentController {
 	private SessionsService sessionsService;
 
 	@GetMapping
-	public List<Appointment> getAllappointments(Authentication authentication) {
-
-//    	String personUsername=authentication.getName();
-//        return personRepository.findByUsername(personUsername).getAppointments();
-		return appointmentService.getAllAppointmentByUserId(2);
+	public List<Appointment> getAllAppointments(Authentication authentication) {
+		return appointmentService.getAllAppointmentByUserUsername(authentication.getName());
 	}
 
 	@GetMapping("/{appointmentId}")
 	public Appointment getAppointmentById(@PathVariable Integer appointmentId) {
-		return appointmentService.getappointmentById(appointmentId);
+		return appointmentService.getAppointmentById(appointmentId);
 	}
 
 	@PostMapping
@@ -53,9 +50,9 @@ public class AppointmentController {
 			@RequestParam(value = "sessionId", required = true) Integer sessionId) {
 		Person person = personRepository.findByUsername(auth.getName());
 		Session session = sessionsService.getSessionById(sessionId);
-		Appointment appointemt = appointmentService.bookAppointmet(session, person);
-		if (appointemt != null) {
-			return new ResponseEntity<Appointment>(appointemt, HttpStatus.OK);
+		Appointment appointment = appointmentService.bookAppointmet(session, person);
+		if (appointment != null) {
+			return new ResponseEntity<Appointment>(appointment, HttpStatus.OK);
 		}
 
 		return new ResponseEntity<Appointment>(HttpStatus.NOT_FOUND);
@@ -63,17 +60,17 @@ public class AppointmentController {
 	}
 
 	@DeleteMapping("/{id}")
-	public void deletAppointment(@PathVariable Integer id) {
-		appointmentService.deleteappointment(id);
+	public void deleteAppointment(@PathVariable Integer id) {
+		appointmentService.deleteAppointment(id);
 	}
 
 	@PutMapping("/{id}/cancel")
 	public ResponseEntity<Appointment> cancelAppointment(Authentication authentication, @PathVariable Integer id) {
-		Appointment appointment = appointmentService.getappointmentById(id);
+		Appointment appointment = appointmentService.getAppointmentById(id);
 		// String personUsername=authentication.getName();
 		HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
 
-		Person person = personRepository.findByUsername("username22");
+		Person person = personRepository.findByUsername(authentication.getName());
 		boolean canceled = appointmentService.cancelAppointmet(appointment, person);
 
 		if (canceled) {
@@ -87,8 +84,8 @@ public class AppointmentController {
 	public ResponseEntity<Appointment> approveAppointment(Authentication authentication, @PathVariable Integer id) {
 		// String personUsername=authentication.getName();
 		HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
-		Appointment appointment = appointmentService.getappointmentById(id);
-		Person person = personRepository.findByUsername("username22");
+		Appointment appointment = appointmentService.getAppointmentById(id);
+		Person person = personRepository.findByUsername(authentication.getName());
 		if (appointmentService.approveAppointmet(appointment, person))
 			status = HttpStatus.OK;
 		return new ResponseEntity<Appointment>(appointment, status);

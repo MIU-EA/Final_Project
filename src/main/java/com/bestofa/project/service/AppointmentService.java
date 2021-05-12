@@ -3,7 +3,6 @@ package com.bestofa.project.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.bestofa.project.domain.Appointment;
 import com.bestofa.project.domain.Person;
-import com.bestofa.project.domain.Role;
 import com.bestofa.project.domain.Session;
 import com.bestofa.project.jms.EmailService;
 import com.bestofa.project.repository.AppointmentRepository;
@@ -32,7 +30,7 @@ public class AppointmentService {
 		return appointmentRepository.findAll();
 	}
 
-	public Appointment getappointmentById(Integer appointmentId) {
+	public Appointment getAppointmentById(Integer appointmentId) {
 		return appointmentRepository.findById(appointmentId).orElse(null);
 	}
 
@@ -41,7 +39,7 @@ public class AppointmentService {
 
 	}
 
-	public void deleteappointment(Integer id) {
+	public void deleteAppointment(Integer id) {
 		appointmentRepository.deleteById(id);
 	}
 
@@ -49,22 +47,22 @@ public class AppointmentService {
 		return personRepository.findById(id).get().getAppointments();
 	}
 
+	public List<Appointment> getAllAppointmentByUserUsername(String username) {
+		return personRepository.findByUsername(username).getAppointments();
+	}
+
 	public boolean cancelAppointmet(Appointment appointment, Person person) {
-		Collection<Role> roles = person.getRoles().values();
 		LocalDate appointmentDate = appointment.getSession().getDate();
 		LocalTime appointmentTime = appointment.getSession().getStartTime();
 		LocalDateTime after2Days = LocalDateTime.now().plusHours(48);
 		LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
 
 		if (appointmentDateTime.isBefore(after2Days)) {
-			for (Role r : roles) {
-				// if person has a role as Admin
-				if (r.getName().equals("Admin")) {
-					appointment.getSession().setAppointmentApproved(null);
-					appointment.setStatus("Canceld");
-					appointment = appointmentService.saveOrUpdateappointment(appointment);
-					return true;
-				}
+			if (person.isAdmin()) {
+				appointment.getSession().setAppointmentApproved(null);
+				appointment.setStatus("Canceld");
+				appointment = appointmentService.saveOrUpdateappointment(appointment);
+				return true;
 			}
 		} else {
 			appointment.getSession().setAppointmentApproved(null);
@@ -76,14 +74,14 @@ public class AppointmentService {
 	}
 
 	public boolean approveAppointmet(Appointment appointment, Person person) {
-			// if person has a role as Admin or provider
-			if (person.isAdmin()||person.isProvider()) {
-				appointment.getSession().setAppointmentApproved(appointment);
-				appointment.setStatus("Approved");
-				appointment = appointmentService.saveOrUpdateappointment(appointment);
-				return true;
-			}
-		
+		// if person has a role as Admin or provider
+		if (person.isAdmin() || person.isProvider()) {
+			appointment.getSession().setAppointmentApproved(appointment);
+			appointment.setStatus("Approved");
+			appointment = appointmentService.saveOrUpdateappointment(appointment);
+			return true;
+		}
+
 		return false;
 
 	}
