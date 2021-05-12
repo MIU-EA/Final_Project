@@ -70,11 +70,14 @@ public class ProjectApplication {
 			"aessenabani@miu.edu"
 		};
 
+		Person admin = new Person("Super", "Admin", null, "admin", encoder.encode("admin"), map);
+		personRepository.save(admin);
+		
 		for (int i = 0; i < 10; i++) {
 			Person person = new Person(names[i % names.length], surnames[i % surnames.length], emails[i % emails.length], "username" + i, encoder.encode("123456"), map);
 			Address address = new Address("52557", "1000 N 4th Street", "Fairfield", "IA", "USA");
 			personRepository.save(person);
-			LocalDate date = LocalDate.now().plusDays(i);
+			LocalDate date = LocalDate.now().plusDays(i + 5);
 			
 			sessionRepository.save(new Session(date, date.atTime(i % 24, i * 34 % 60).toLocalTime(), i + 5, person, address));
 		}
