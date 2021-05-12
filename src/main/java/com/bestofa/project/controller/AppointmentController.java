@@ -39,6 +39,7 @@ public class AppointmentController {
 
 	@GetMapping
 	public List<Appointment> getAllappointments(Authentication authentication) {
+
 //    	String personUsername=authentication.getName();
 //        return personRepository.findByUsername(personUsername).getAppointments();
 		return appointmentService.getAllAppointmentByUserId(2);
@@ -84,7 +85,6 @@ public class AppointmentController {
 		}
 
 		return new ResponseEntity<Appointment>(appointment, status);
-
 	}
 
 	@PutMapping("/{id}/approve")
