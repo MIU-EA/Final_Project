@@ -1,14 +1,27 @@
 package com.bestofa.project.domain;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
+import javax.persistence.OneToMany;
+import javax.persistence.SecondaryTable;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,8 +32,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public class Person {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -46,10 +59,9 @@ public class Person {
     @JsonIgnore
 	private List<Session> sessions; // as a counselor
 
-
 	@OneToMany(mappedBy = "requestor", cascade = CascadeType.ALL)
 	@JsonIgnore
-	private List<Appointment> Appointments;
+	private List<Appointment> appointments;
 
 	public Person(String name, String surname, String email, String username, String password, Map<String, Role> roles) {
 		super();
@@ -66,23 +78,19 @@ public class Person {
 		return name + " " + surname;
 	}
 	
+	public boolean isCustomer() {
+		return isRole("Customer");
+	}
+	
 	public boolean isAdmin() {
-		Collection<Role> roles = this.getRoles().values();
-		for (Role r : roles) {
-			// if person has a role as Admin
-			if (r.getName().equals("Admin")) 
-				return true;}
-			return false;
-			
-		}
+		return isRole("Admin");
+	}
 	
 	public boolean isProvider() {
-		Collection<Role> roles = this.getRoles().values();
-		for (Role r : roles) {
-			// if person has a role as Provider
-			if (r.getName().equals("Provider")) 
-				return true;}
-			return false;
-			
-		}
+		return isRole("Provider");
+	}
+	
+	public boolean isRole(String roleName) {
+		return this.getRoles().keySet().stream().anyMatch(r -> r.equals(roleName));
+	}
 }

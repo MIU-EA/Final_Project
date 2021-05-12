@@ -1,5 +1,14 @@
 package com.bestofa.project.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.bestofa.project.domain.Appointment;
 import com.bestofa.project.domain.Person;
 import com.bestofa.project.domain.Role;
@@ -7,18 +16,6 @@ import com.bestofa.project.domain.Session;
 import com.bestofa.project.jms.EmailService;
 import com.bestofa.project.repository.AppointmentRepository;
 import com.bestofa.project.repository.PersonRepository;
-import com.bestofa.project.repository.SessionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AppointmentService {
@@ -93,7 +90,7 @@ public class AppointmentService {
 
 	public Appointment bookAppointmet(Session session, Person person) {
 		Appointment appointment = new Appointment();
-		appointment.setRequestor(personRepository.findByUsername("username22"));
+		appointment.setRequestor(person);
 		if (session.getDate().isAfter(LocalDate.now())) {
 			appointment.setSession(session);
 			session.getAppointmentsRequest().add(appointment);

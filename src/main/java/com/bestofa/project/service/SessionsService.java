@@ -1,12 +1,13 @@
 package com.bestofa.project.service;
 
-import com.bestofa.project.domain.Appointment;
-import com.bestofa.project.domain.Session;
-import com.bestofa.project.repository.SessionRepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.bestofa.project.domain.Appointment;
+import com.bestofa.project.domain.Session;
+import com.bestofa.project.repository.SessionRepository;
 
 @Service
 public class SessionsService {
