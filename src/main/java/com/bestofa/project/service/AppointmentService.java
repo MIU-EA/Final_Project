@@ -79,16 +79,14 @@ public class AppointmentService {
 	}
 
 	public boolean approveAppointmet(Appointment appointment, Person person) {
-		Collection<Role> roles = person.getRoles().values();
-		for (Role r : roles) {
-			// if person has a role as Admin
-			if (r.getName().equals("Admin")) {
+			// if person has a role as Admin or provider
+			if (person.isAdmin()||person.isProvider()) {
 				appointment.getSession().setAppointmentApproved(appointment);
 				appointment.setStatus("Approved");
 				appointment = appointmentService.saveOrUpdateappointment(appointment);
 				return true;
 			}
-		}
+		
 		return false;
 
 	}

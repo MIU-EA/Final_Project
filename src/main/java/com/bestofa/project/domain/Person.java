@@ -1,5 +1,6 @@
 package com.bestofa.project.domain;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,4 +65,24 @@ public class Person {
 	public String getFullname() {
 		return name + " " + surname;
 	}
+	
+	public boolean isAdmin() {
+		Collection<Role> roles = this.getRoles().values();
+		for (Role r : roles) {
+			// if person has a role as Admin
+			if (r.getName().equals("Admin")) 
+				return true;}
+			return false;
+			
+		}
+	
+	public boolean isProvider() {
+		Collection<Role> roles = this.getRoles().values();
+		for (Role r : roles) {
+			// if person has a role as Provider
+			if (r.getName().equals("Provider")) 
+				return true;}
+			return false;
+			
+		}
 }
