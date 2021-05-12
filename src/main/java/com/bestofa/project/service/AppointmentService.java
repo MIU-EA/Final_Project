@@ -93,7 +93,7 @@ public class AppointmentService {
 
 	public Appointment bookAppointmet(Session session, Person person) {
 		Appointment appointment = new Appointment();
-		appointment.setRequestor(personRepository.findByUsername("username22"));
+		appointment.setRequestor(person);
 		if (session.getDate().isAfter(LocalDate.now())) {
 			appointment.setSession(session);
 			session.getAppointmentsRequest().add(appointment);
