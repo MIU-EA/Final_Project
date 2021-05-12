@@ -1,8 +1,6 @@
 package com.bestofa.project;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -28,7 +26,7 @@ public class ProjectApplication {
 
 	@Autowired
 	private PasswordEncoder encoder;
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(ProjectApplication.class, args);
 	}
@@ -39,50 +37,50 @@ public class ProjectApplication {
 		PersonRepository personRepository = context.getBean(PersonRepository.class);
 		RoleRepository roleRepository = context.getBean(RoleRepository.class);
 
-		Map<String, Role> map = new HashMap<String, Role>();
+		Role adminRole = new Role("Admin");
+		roleRepository.save(adminRole);
 
-		String[] roleNames = { "Admin", "Customer", "Provider" };
-		for (String roleName : roleNames) {
-			Role role = new Role(roleName);
-			roleRepository.save(role);
-			map.put(role.getName(), role);
-		}
+		Role customerRole = new Role("Customer");
+		roleRepository.save(customerRole);
 
-		String[] names = {
-			"Alperen",
-			"Abyalew",
-			"Anuj",
-			"Abraham",
-			"Anas"
-		};
-		String[] surnames = {
-			"Elbasan",
-			"Ambaneh",
-			"Aryal",
-			"Abrea",
-			"Essebani",
-		};
-		String[] emails = {
-			"aelbasan@miu.edu",
-			"aambaneh@miu.edu",
-			"anujaryal@miu.edu",
-			"aabrea@miu.edu",
-			"aessenabani@miu.edu"
-		};
+		Role providerRole = new Role("Provider");
+		roleRepository.save(providerRole);
 
-		Person admin = new Person("Super", "Admin", null, "admin", encoder.encode("admin"), map);
+		String[] usernames = { "alperen", "abby", "anuj", "abraham", "anas" };
+		String[] names = { "Alperen", "Abyalew", "Anuj", "Abraham", "Anas" };
+		String[] surnames = { "Elbasan", "Ambaneh", "Aryal", "Abrea", "Essebani", };
+		String[] emails = { "aelbasan@miu.edu", "aambaneh@miu.edu", "anujaryal@miu.edu", "aabrea@miu.edu",
+				"aessenabani@miu.edu" };
+
+		Person admin = new Person("Super", "Admin", null, "admin", encoder.encode("admin"), adminRole);
 		personRepository.save(admin);
-		
-		for (int i = 0; i < 10; i++) {
-			Person person = new Person(names[i % names.length], surnames[i % surnames.length], emails[i % emails.length], "username" + i, encoder.encode("123456"), map);
+
+		Person provider = new Person("Prof", "Provider", "1alperenelbasan98@gmail.com", "provider", encoder.encode("provider"), providerRole);
+		personRepository.save(provider);
+
+		for (int i = 0; i < usernames.length; i++) {
+			Person person = new Person(
+					// person name
+					names[i % names.length],
+					// person surname
+					surnames[i % surnames.length],
+					// person email
+					emails[i % emails.length],
+					// person username
+					usernames[i],
+					// person password,
+					encoder.encode("123456"),
+					// person role
+					customerRole);
 			Address address = new Address("52557", "1000 N 4th Street", "Fairfield", "IA", "USA");
 			personRepository.save(person);
 			LocalDate date = LocalDate.now().plusDays(i + 5);
-			
-			sessionRepository.save(new Session(date, date.atTime(i % 24, i * 34 % 60).toLocalTime(), i + 5, person, address));
+
+			sessionRepository
+					.save(new Session(date, date.atTime(i % 24, i * 34 % 60).toLocalTime(), i + 5, person, address));
 		}
 
-		//sendEmailService.sendEmail();
+		// sendEmailService.sendEmail();
 	}
 
 }

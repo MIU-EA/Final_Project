@@ -20,7 +20,7 @@ import com.bestofa.project.domain.Person;
 import com.bestofa.project.domain.Session;
 import com.bestofa.project.repository.PersonRepository;
 import com.bestofa.project.service.AppointmentService;
-import com.bestofa.project.service.SessionsService;
+import com.bestofa.project.service.SessionService;
 
 @RestController
 @RequestMapping("/clients/appointments")
@@ -33,7 +33,7 @@ public class AppointmentController {
 	private PersonRepository personRepository;
 
 	@Autowired
-	private SessionsService sessionsService;
+	private SessionService sessionsService;
 
 	@GetMapping
 	public List<Appointment> getAllAppointments(Authentication authentication) {
@@ -77,7 +77,7 @@ public class AppointmentController {
 			status = HttpStatus.OK;
 		}
 
-		return new ResponseEntity<Appointment>(appointment, status);
+		return new ResponseEntity<Appointment>(appointmentService.getAppointmentById(appointment.getId()), status);
 	}
 
 	@PutMapping("/{id}/approve")

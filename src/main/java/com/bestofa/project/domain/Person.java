@@ -73,6 +73,17 @@ public class Person {
 		this.roles = new HashMap<>(roles);
 	}
 	
+	public Person(String name, String surname, String email, String username, String password, Role role) {
+		super();
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.roles = new HashMap<String, Role>();
+		this.roles.put(role.getName(), role);
+	}
+	
 	@JsonGetter
 	public String getFullname() {
 		return name + " " + surname;

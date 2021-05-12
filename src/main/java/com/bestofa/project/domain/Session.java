@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -42,6 +44,7 @@ public class Session {
 
 	@OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
 	@OrderColumn(name = "sequence")
+	@Where(clause="status='Pending'")
 	@JsonIgnore
 	private List<Appointment> appointmentsRequest;
 

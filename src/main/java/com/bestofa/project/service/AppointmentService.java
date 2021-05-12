@@ -36,7 +36,6 @@ public class AppointmentService {
 
 	public Appointment saveOrUpdateappointment(Appointment appointment) {
 		return appointmentRepository.save(appointment);
-
 	}
 
 	public void deleteAppointment(Integer id) {
@@ -54,23 +53,40 @@ public class AppointmentService {
 	public boolean cancelAppointmet(Appointment appointment, Person person) {
 		LocalDate appointmentDate = appointment.getSession().getDate();
 		LocalTime appointmentTime = appointment.getSession().getStartTime();
-		LocalDateTime after2Days = LocalDateTime.now().plusHours(48);
 		LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
+		
+		LocalDateTime after2Days = LocalDateTime.now().plusHours(48);
 
 		if (appointmentDateTime.isBefore(after2Days)) {
 			if (person.isAdmin()) {
-				appointment.getSession().setAppointmentApproved(null);
-				appointment.setStatus("Canceld");
-				appointment = appointmentService.saveOrUpdateappointment(appointment);
+				cancelAppointmentHelper(appointment);
+
 				return true;
 			}
 		} else {
-			appointment.getSession().setAppointmentApproved(null);
-			appointment.setStatus("Canceld");
-			appointment = appointmentService.saveOrUpdateappointment(appointment);
+			cancelAppointmentHelper(appointment);
+
 			return true;
 		}
 		return false;
+	}
+
+	private Appointment cancelAppointmentHelper(Appointment canceledAppointment) {
+		Session session = canceledAppointment.getSession();
+		
+		canceledAppointment.setStatus("Canceled");
+		appointmentService.saveOrUpdateappointment(canceledAppointment); 
+
+		Appointment newApprovedAppointment = session.getAppointmentsRequest().stream().filter(r -> r != null)
+				.findFirst().orElse(null);
+		
+		if (newApprovedAppointment != null) {
+			session.setAppointmentApproved(newApprovedAppointment);
+			newApprovedAppointment.setStatus("Approved");
+			appointmentService.saveOrUpdateappointment(newApprovedAppointment);
+		}
+
+		return canceledAppointment;
 	}
 
 	public boolean approveAppointmet(Appointment appointment, Person person) {
@@ -79,6 +95,7 @@ public class AppointmentService {
 			appointment.getSession().setAppointmentApproved(appointment);
 			appointment.setStatus("Approved");
 			appointment = appointmentService.saveOrUpdateappointment(appointment);
+
 			return true;
 		}
 
@@ -93,6 +110,7 @@ public class AppointmentService {
 			appointment.setSession(session);
 			session.getAppointmentsRequest().add(appointment);
 			appointment = appointmentService.saveOrUpdateappointment(appointment);
+
 			return appointment;
 		}
 		return null;
