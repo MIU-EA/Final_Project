@@ -12,10 +12,9 @@ import java.util.List;
 public class SessionsService {
     @Autowired
     SessionRepository sessionRepository;
-    
 
     public List<Session> getAllSessions(){
-        return sessionRepository.findAll();
+        return sessionRepository.findAll().stream();
     }
 
     public Session getSessionById(Integer sessionId) {
